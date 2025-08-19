@@ -1,0 +1,40 @@
+[
+  {
+    "owner": null,
+    "confirmed": true,
+    "participants": [],
+    "vibe": "artsy",
+    "cafe": {
+      "name": "Leslie Cafe",
+      "address": "",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop"
+    },
+    "book": "Howl's Moving Castle",
+    "outfit": "Simple black top with an artful accessory",
+    "funTip": "Take a photo of your setup",
+    "funActivity": "Snap a picture of your shoes right now.",
+    "start": "2025-08-19T16:45:00.000Z",
+    "end": "2025-08-19T18:15:00.000Z",
+    "id": "1755619963147dy1o6r",
+    "createdAt": "2025-08-19T16:12:43.147Z"
+  },
+  {
+    "owner": null,
+    "confirmed": true,
+    "participants": [],
+    "vibe": "artsy",
+    "cafe": {
+      "name": "Leslie Cafe",
+      "address": "",
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop"
+    },
+    "book": "A Wizard of Earthsea",
+    "outfit": "Simple black top with an artful accessory",
+    "funTip": "Wear blue socks for luck",
+    "funActivity": "Swap the order of your next two tasks.",
+    "start": "2025-08-19T19:30:00.000Z",
+    "end": "2025-08-19T21:00:00.000Z",
+    "id": "17556195872616bqlmk",
+    "createdAt": "2025-08-19T16:06:27.261Z"
+  }
+]

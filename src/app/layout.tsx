@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { ToneProvider } from "@/ui/ToneProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300","400","500","600","700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const grotesk = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["400","500","600","700"],
 });
 
 export const metadata: Metadata = {
@@ -24,8 +27,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body suppressHydrationWarning className={`${poppins.variable} ${grotesk.variable}`}>
+        <ToneProvider>
+        <div className="toolbar">
+          <a href="/" className="brand">
+            <span className="brand-dot" />
+            <span>cupNgo</span>
+          </a>
+          <nav className="row">
+            <a href="/shelf" className="subtle">Shelf</a>
+          </nav>
+        </div>
         {children}
+        </ToneProvider>
       </body>
     </html>
   );
