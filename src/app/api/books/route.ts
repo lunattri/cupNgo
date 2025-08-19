@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = SubmitSchema.parse(body);
     // In-memory append (demo). In production, persist to DB and moderate.
-    books.push({ title: data.title, author: data.author, vibe: data.vibe });
+    books.push({ title: data.title, author: data.author, vibe: data.vibe, image: "" });
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Invalid" }, { status: 400 });

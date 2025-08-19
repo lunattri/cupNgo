@@ -36,10 +36,11 @@ export async function POST(req: NextRequest) {
     const dateISO = date.length <= 10 ? `${date}T00:00:00` : date;
     const plan = await generatePlanAsync(dateISO, vibes, { cafeId, origin, start, mood });
 
+    const cafe = plan.cafe ?? { name: "Cafe", address: "", image: "" } as any;
     const calendarLink = googleCalendarLink({
-      title: `Cafe date at ${plan.cafe.name}`,
+      title: `Cafe date at ${cafe.name}`,
       details: `Vibe: ${plan.vibe}\nBooks: ${plan.books.map((b:any)=>b.title).join(", ")}\nOutfit: ${plan.outfit.suggestion}`,
-      location: `${plan.cafe.name}, ${plan.cafe.address}`,
+      location: `${cafe.name}, ${cafe.address}`,
       start: plan.start,
       end: plan.end,
     });
