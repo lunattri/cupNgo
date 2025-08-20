@@ -44,7 +44,8 @@ export default function ShelfPage() {
       const params = new URLSearchParams();
       if (q) params.set("q", q);
       if (onlyConfirmed) params.set("confirmed", "true");
-      const res = await fetch(`/api/plans?${params.toString()}`, { cache: "no-store" });
+      const token = localStorage.getItem("auth_token");
+      const res = await fetch(`/api/plans?${params.toString()}`, { cache: "no-store", headers: { Authorization: token ? `Bearer ${token}` : "" } });
       if (!res.ok) throw new Error("Failed to load plans");
       const data = await res.json();
       setItems(data.items || []);
@@ -56,6 +57,14 @@ export default function ShelfPage() {
   }
 
   useEffect(() => {
+    // If not logged in, redirect to signup
+    try {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        window.location.assign("/signup");
+        return;
+      }
+    } catch {}
     fetchPlans();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, onlyConfirmed]);

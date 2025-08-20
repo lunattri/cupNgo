@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { addPlan, loadPlans, ServerPlan } from "@/lib/serverStore";
+import { addPlan, loadPlans } from "@/lib/serverStore";
+import { verifyAuthToken } from "@/lib/jwt";
 
 const CreateSchema = z.object({
   owner: z.string().email().optional().nullable(),
@@ -17,6 +18,17 @@ const CreateSchema = z.object({
 });
 
 export async function GET(req: NextRequest) {
+  const auth = req.headers.get("authorization");
+  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let ownerEmail: string | null = null;
+  try {
+    const payload = verifyAuthToken(token);
+    ownerEmail = payload.email;
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const url = new URL(req.url);
   const q = (url.searchParams.get("q") || "").toLowerCase();
   const confirmedParam = url.searchParams.get("confirmed");
@@ -26,13 +38,13 @@ export async function GET(req: NextRequest) {
   const dateFrom = url.searchParams.get("dateFrom");
   const dateTo = url.searchParams.get("dateTo");
   const participant = url.searchParams.get("participant");
-  const owner = url.searchParams.get("owner");
   const page = parseInt(url.searchParams.get("page") || "1", 10);
   const pageSize = Math.min(parseInt(url.searchParams.get("pageSize") || "20", 10), 100);
 
   let items = loadPlans();
+  // Scope to current user only
+  items = items.filter((p) => (p.owner || "") === ownerEmail);
   if (typeof confirmed === "boolean") items = items.filter((p) => p.confirmed === confirmed);
-  if (owner) items = items.filter((p) => (p.owner || "") === owner);
   if (participant) items = items.filter((p) => p.participants?.some((e) => e.toLowerCase() === participant.toLowerCase()));
   if (dateFrom) items = items.filter((p) => new Date(p.start) >= new Date(dateFrom));
   if (dateTo) items = items.filter((p) => new Date(p.start) <= new Date(dateTo));
@@ -77,11 +89,22 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = req.headers.get("authorization");
+  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+  if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  let ownerEmail: string | null = null;
+  try {
+    const payload = verifyAuthToken(token);
+    ownerEmail = payload.email;
+  } catch {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
     const parsed = CreateSchema.parse(body);
     const created = addPlan({
-      owner: (parsed.owner ?? null) as string | null,
+      owner: ownerEmail,
       confirmed: parsed.confirmed,
       participants: parsed.participants || [],
       vibe: parsed.vibe,

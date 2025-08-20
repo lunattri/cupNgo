@@ -30,7 +30,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${poppins.variable} ${grotesk.variable}`}>
         <ToneProvider>
         <div className="toolbar">
-          <a href="/" className="brand">
+          <a href="/signin" className="brand">
             <span className="brand-dot" />
             <span>cupNgo</span>
           </a>

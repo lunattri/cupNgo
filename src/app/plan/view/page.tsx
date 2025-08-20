@@ -97,7 +97,6 @@ export default function PlanViewPage() {
                 (async () => {
                   try {
                     const payload = {
-                      owner: null,
                       confirmed: true,
                       participants: [],
                       vibe: (plan as any).vibe,
@@ -109,7 +108,8 @@ export default function PlanViewPage() {
                       start: plan.start,
                       end: plan.end,
                     };
-                    const res = await fetch("/api/plans", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                    const token = localStorage.getItem("auth_token");
+                    const res = await fetch("/api/plans", { method: "POST", headers: { "Content-Type": "application/json", Authorization: token ? `Bearer ${token}` : "" }, body: JSON.stringify(payload) });
                     if (!res.ok) throw new Error("Failed to save plan");
                     window.location.assign("/shelf");
                   } catch {}

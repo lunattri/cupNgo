@@ -28,7 +28,12 @@ export default function VibesPage() {
               key={v.key}
               onClick={() => {
                 try { localStorage.setItem("vibe_pref", v.key); } catch {}
-                window.location.assign("/shelf");
+                const token = localStorage.getItem("auth_token");
+                if (!token) {
+                  window.location.assign("/signin");
+                } else {
+                  window.location.assign("/shelf");
+                }
               }}
               className="card"
               style={{ textAlign: "left", padding: 0, overflow: "hidden", display: "block", width: "100%" }}
@@ -46,7 +51,7 @@ export default function VibesPage() {
         <div className="card">
           <div className="subtle">We will recommend books and an outfit that match this vibe. You can always change your mind later.</div>
         </div>
-        <a className="btn btn-secondary btn-block" href="/shelf">Continue without picking</a>
+        <a className="btn btn-secondary btn-block" href="/signin">Continue without picking</a>
       </div>
     </div>
   );
